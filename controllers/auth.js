@@ -1,58 +1,17 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const {validationResult} = require('express-validator');
 const Usuarios = require('../models/Usuarios');
 
-// const CrearUsuario = async(req,res= express.response)=>{
-//     // console.log(req.body)
-//     const { username, email, password, confirmPassword } = req.body;
+// Función para generar JWT
+const generateJWT = (id, userType) => {
+    return jwt.sign({ id, userType }, process.env.JWT_SECRET, {
+        expiresIn: '4h', // Expiración del token
+    });
+};
 
-//     if (password !== confirmPassword) {
-//         return res.status(400).json({
-//             ok: false,
-//             msg: 'Las contraseñas no coinciden',
-//         });
-//     }
 
-//     try{
-    
-//     let usuario = await Usuarios.findOne({email})
-//     console.log(usuario);
-//     console.log(pwd)
-
-//         if(usuario){
-//             return res.status(400).json({
-//                 ok:false,
-//                 uid:usuario.id,
-//                 msg:'este correo ya existe'
-//             })
-//         }
-    
-//     usuario = new Usuarios({ name: username, email, pwd: password });    
-//     //usuario = new Usuarios(req.body);
-
-//     ///encriptando password
-//     const salt  = bcrypt.genSaltSync(10);//10 por defecto
-//     //usuario.pwd = bcrypt.hashSync(pwd , salt);
-
-//     await usuario.save();
-
-//     res.status(201).json({
-//         ok:true,
-//         msg:'Usuario registrado exitosamente',
-//         pass: pwd
-//         // name,      
-//         // email,
-//         // pwd
-//     })
-//     }catch (error){
-//         console.log("Error en CrearUsuario:", error);
-//         res.status(500).json({
-//             ok: false,
-//             msg: `Error interno: ${error.message || 'por favor notifica al admin Aldo Sanchez Leon'}`,
-//         });
-//     }
-// }
 const CrearUsuario = async (req, res = express.response) => {
     const { username, email, password, confirmPassword } = req.body;
 
@@ -109,7 +68,7 @@ const LoginUsuario = async (req, res = express.response) => {
         if (!usuario) {
             return res.status(400).json({
                 ok: false,
-                msg: 'El correo no está registrado',
+                msg: 'Credenciales no correctas',
             });
         }
 
@@ -118,9 +77,11 @@ const LoginUsuario = async (req, res = express.response) => {
         if (!validPassword) {
             return res.status(400).json({
                 ok: false,
-                msg: 'Contraseña incorrecta',
+                msg: 'Credenciales no correctas',
             });
         }
+
+        const token = generateJWT(usuario.id, usuario.puesto);
 
         // Respuesta exitosa
         res.status(200).json({
@@ -128,6 +89,8 @@ const LoginUsuario = async (req, res = express.response) => {
             msg: 'Inicio de sesión exitoso',
             username: usuario.username,
             email: usuario.email,
+            puesto:usuario.puesto,
+            token
         });
     } catch (error) {
         console.error('Error en LoginUsuario:', error);
