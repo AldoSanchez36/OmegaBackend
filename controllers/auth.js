@@ -41,6 +41,7 @@ const CrearUsuario = async (req, res = express.response) => {
             username,          // Asignar directamente el campo `username`
             email,             // Directamente asignar `email`
             password: hashedPassword, // Cambiar `pwd` a `password`
+            puesto: 'user'
         });
 
         // Guardar usuario en la base de datos
@@ -132,6 +133,24 @@ const UpdateUsuario  = async(req,res= express.response)=>{
 }
 
 
+
+const GetUsers = async (req, res = express.response) => {
+    try {
+        // Obtener todos los usuarios de la base de datos
+        const usuarios = await Usuarios.find({}, 'username email puesto'); // Selecciona los campos deseados
+        res.status(200).json({
+            ok: true,
+            usuarios, // Enviar la lista de usuarios
+        });
+    } catch (error) {
+        console.error("Error en ObtenerUsuarios:", error);
+        res.status(500).json({
+            ok: false,
+            msg: `Error interno: ${error.message || 'por favor notifica al admin Aldo Sanchez Leon'}`,
+        });
+    }
+};
+
 module.exports ={
-    CrearUsuario,RevalidarUsuario,LoginUsuario,UpdateUsuario
+    CrearUsuario,RevalidarUsuario,LoginUsuario,UpdateUsuario,GetUsers
 }

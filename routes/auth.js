@@ -1,34 +1,43 @@
 // Rutas de usuario y autenticacion
 // host + /api/auth
-const {check} = require('express-validator') 
-const  { Router } = require('express');
-const router = Router();
-const {CrearUsuario,RevalidarUsuario,LoginUsuario, UpdateUsuario} = require('../controllers/auth');
-const { validarCampos } = require('../middelwares/validar-campos');
+const { Router } = require('express');
+const { check } = require('express-validator');
+const { 
+    CrearUsuario, 
+    LoginUsuario, 
+    RevalidarUsuario, 
+    UpdateUsuario, 
+    GetUsers 
+} = require('../controllers/auth');
 
+const router = Router();
+
+// Rutas de autenticación
 router.post(
     '/register',
     [
         check('username', 'El nombre de usuario es obligatorio').not().isEmpty(),
         check('email', 'El correo debe ser válido').isEmail(),
         check('password', 'La contraseña debe tener al menos 6 caracteres').isLength({ min: 6 }),
-        validarCampos, // Middleware de validación
     ],
     CrearUsuario
-);//post
+);
 
-        //login
-router.post("/",
-        [
-            check('email','el email es obligatorio').isEmail(),
-            check('password','el password debe ser de 6 caracteres').isLength({min:6}),
-            validarCampos
-        ]
-        ,LoginUsuario);//post
-        
-router.post("/update",UpdateUsuario);//post
+router.post(
+    '/login',
+    [
+        check('email', 'El email es obligatorio').isEmail(),
+        check('password', 'El password debe ser de 6 caracteres').isLength({ min: 6 }),
+    ],
+    LoginUsuario
+);
 
+router.get('/renew', RevalidarUsuario);
 
-router.get("/renew",RevalidarUsuario);
+// Ruta para obtener todos los usuarios
+router.get('/users', GetUsers); // Añade esta línea para habilitar la ruta
+
+// Ruta para actualizar un usuario
+router.post('/update', UpdateUsuario);
 
 module.exports = router;
