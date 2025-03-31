@@ -1,46 +1,10 @@
-import { Sequelize } from "sequelize";
-import db from '../DBSQL/database.js';
+const { createClient } = require('@supabase/supabase-js');
 
-const { DataTypes } = Sequelize;
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+    console.error("⚠ ERROR: No se encontraron las variables de entorno para Supabase.");
+    process.exit(1);
+}
 
-const ProductSQL = db.define('products',{
-    title:{
-        type: DataTypes.DOUBLE
-    },
-    price:{
-        type: DataTypes.DOUBLE
-    }
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY );
 
-},{
-    freezeTableName: true
-});
-
-export default ProductSQL;
-
-// mfg_num:{
-//     type: DataTypes.STRING
-// }
-// prod_line:{
-//     type: DataTypes.STRING
-// }
-// model:{
-//     type: DataTypes.DOUBLE
-// }
-// area:{
-//     type: DataTypes.STRING
-// }
-// country:{
-//     type: DataTypes.STRING
-// }
-// customer:{
-//     type: DataTypes.STRING
-// }
-// rev:{
-//     type: DataTypes.STRING
-// }
-// shpdate:{
-//     type: DataTypes.STRING
-// }
-// status:{
-//     type: DataTypes.STRING
-// }
+module.exports = supabase;

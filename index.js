@@ -1,15 +1,18 @@
 const express = require('express');
 const cors = require('cors');
-const { dbConnection } = require('./DB/config'); // Configuración de MongoDB
-const mongoose = require('mongoose');
+require('dotenv').config();
+//Mongoo
+//const { dbConnection } = require('./DB/config'); // Configuración de MongoDB
+//const mongoose = require('mongoose');
+
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
-require('dotenv').config();
 
 const app = express();
 
 // Configuración de Mongoose
-mongoose.set('strictQuery', true); // Ajusta según tus necesidades
+//mongoose.set('strictQuery', true); // Ajusta según tus necesidades
+const supabase = require('./DB/sqlConfig'); // Conexión a Supabase
 
 // Middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,7 +22,7 @@ app.use(fileUpload());
 app.use(cors());
 
 // Conexión a la base de datos
-dbConnection();
+//dbConnection();
 
 // Rutas
 app.use('/api/auth', require('./routes/auth'));

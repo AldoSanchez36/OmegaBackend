@@ -5,10 +5,12 @@ const { check } = require('express-validator');
 const { 
     CrearUsuario, 
     LoginUsuario, 
-    RevalidarUsuario, 
+    
     UpdateUsuario, 
-    GetUsers 
-} = require('../controllers/auth');
+    getAllUsers 
+} = require('../controllers/authSQL');
+//RevalidarUsuario, 
+//require('../controllers/auth');
 
 const router = Router();
 
@@ -32,10 +34,10 @@ router.post(
     LoginUsuario
 );
 
-router.get('/renew', RevalidarUsuario);
+//router.get('/renew', RevalidarUsuario);
 
 // Ruta para obtener todos los usuarios
-router.get('/users', GetUsers); // Añade esta línea para habilitar la ruta
+router.get('/users', getAllUsers); // Añade esta línea para habilitar la ruta
 
 // Ruta para actualizar un usuario
 router.post('/update', UpdateUsuario);
