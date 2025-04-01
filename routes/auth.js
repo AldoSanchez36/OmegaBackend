@@ -5,16 +5,18 @@ const { check } = require('express-validator');
 const { 
     CrearUsuario, 
     LoginUsuario, 
-    
+    LogoutUsuario,
     UpdateUsuario, 
-    getAllUsers 
+    getAllUsers,
+    DeleteUsuario,
+    getUserById,
 } = require('../controllers/authSQL');
 //RevalidarUsuario, 
 //require('../controllers/auth');
 
 const router = Router();
 
-// Rutas de autenticación
+// Rutas de autenticación para crear un nuevo usuario
 router.post(
     '/register',
     [
@@ -25,6 +27,7 @@ router.post(
     CrearUsuario
 );
 
+// Ruta para iniciar sesión
 router.post(
     '/login',
     [
@@ -34,12 +37,23 @@ router.post(
     LoginUsuario
 );
 
-//router.get('/renew', RevalidarUsuario);
+// Ruta para revalidar el token
+// router.get('/renew', RevalidarUsuario);
+
+// Ruta para cerrar sesión
+router.post('/logout', LogoutUsuario);
+
+// Ruta para obtener un usuario por ID
+router.get('/user/:id', getUserById);
 
 // Ruta para obtener todos los usuarios
-router.get('/users', getAllUsers); // Añade esta línea para habilitar la ruta
+router.get('/users', getAllUsers); 
 
 // Ruta para actualizar un usuario
 router.post('/update', UpdateUsuario);
+
+// Ruta para eliminar un usuario
+router.delete('/delete', DeleteUsuario);
+
 
 module.exports = router;

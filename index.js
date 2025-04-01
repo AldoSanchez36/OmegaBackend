@@ -26,9 +26,18 @@ app.use(cors());
 
 // Rutas
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/plantas', require('./routes/plantas'));
+app.use('/api/procesos', require('./routes/procesos'));
+app.use('/api/variables', require('./routes/variables'));
+app.use('/api/formulas', require('./routes/formulas'));
+app.use('/api/accesos/plantas', require('./routes/accesosPlantas'));
+app.use('/api/accesos/procesos', require('./routes/accesosProcesos'));
 
-const testRoute = require('./routes/test');
-app.use('/', testRoute);
+// Middleware para manejo de errores globales
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({ ok: false, msg: 'Error interno del servidor' });
+});
 
 // Manejo de errores no controlados
 process.on('unhandledRejection', (error) => {

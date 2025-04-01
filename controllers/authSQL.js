@@ -149,12 +149,64 @@ const getAllUsers = async (req, res = express.response) => {
     }
 };
 
+const DeleteUsuario = async (req, res = express.response) => {
+    const { email } = req.body;
 
+    try {
+        const eliminado = await UsuariosSQL.deleteUser(email);
+
+        if (!eliminado || eliminado.length === 0) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontró el usuario para eliminar',
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Usuario eliminado correctamente',
+        });
+    } catch (error) {
+        console.error("Error en DeleteUsuario:", error);
+        res.status(500).json({
+            ok: false,
+            msg: `Error interno: ${error.message || 'por favor notifica al admin Aldo Sanchez Leon'}`,
+        });
+    }
+};
+
+const getUserById = async (req, res = express.response) => {
+    const { id } = req.params;
+
+    try {
+        const usuario = await UsuariosSQL.getUserById(id);
+
+        if (!usuario) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Usuario no encontrado',
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            usuario,
+        });
+    } catch (error) {
+        console.error("Error en getUserById:", error);
+        res.status(500).json({
+            ok: false,
+            msg: `Error interno: ${error.message || 'por favor notifica al admin Aldo Sanchez Leon'}`,
+        });
+    }
+};
 
 module.exports = {
     CrearUsuario,
     LoginUsuario,
+    LogoutUsuario,
     UpdateUsuario,
+    getUserById,
     getAllUsers,
-    LogoutUsuario
+    DeleteUsuario
 };
