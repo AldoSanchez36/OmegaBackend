@@ -32,6 +32,7 @@ app.use('/api/variables', require('./routes/variables'));
 app.use('/api/formulas', require('./routes/formulas'));
 app.use('/api/accesos/plantas', require('./routes/accesosPlantas'));
 app.use('/api/accesos/procesos', require('./routes/accesosProcesos'));
+app.use('/api/reportes', require('./routes/reportes'));
 
 // Middleware para manejo de errores globales
 app.use((err, req, res, next) => {
