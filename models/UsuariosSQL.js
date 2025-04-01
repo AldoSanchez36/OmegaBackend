@@ -78,7 +78,8 @@ class UsuariosSQL {
         const { data, error } = await supabase
             .from('usuarios')
             .delete()
-            .eq('id', id);
+            .eq('id', id)
+            .select('*');
 
         if (error) {
             console.error('Error al eliminar usuario:', error);
