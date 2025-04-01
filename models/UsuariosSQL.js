@@ -2,17 +2,11 @@ const supabase = require('../DB/sqlConfig');
 
 class UsuariosSQL {
     // Crea un nuevo usuario con los campos necesarios para el sistema de CRM
-    static async createUser(username, email, password, rol = 'user') {
+    static async createUser(username, email, password, puesto = 'user') {
         const { data, error } = await supabase
             .from('usuarios')
-            .insert([{
-                username,
-                email,
-                password,
-                rol,
-                creado_en: new Date().toISOString() // timestamp de creación
-            }])
-            .select('*'); // Esto devuelve los datos insertados
+            .insert([{ username, email, password, puesto }])
+            .select('*');
 
         if (error) {
             console.error('Error al crear usuario:', error);
@@ -27,7 +21,7 @@ class UsuariosSQL {
             .from('usuarios')
             .select('*')
             .eq('email', email)
-            .single();
+            .maybeSingle();
 
         if (error) {
             console.error('Error al obtener usuario:', error);
@@ -36,31 +30,19 @@ class UsuariosSQL {
         return data;
     }
 
-    // Actualiza un usuario existente, permitiendo cambios en puesto y rol
-    static async updateUser(email, updates) {
+    // Obtiene un usuario por su ID
+    static async getUserById(id) {
         const { data, error } = await supabase
             .from('usuarios')
-            .update(updates) // puede incluir { puesto: '...', rol: '...' }
-            .eq('email', email);
+            .select('*')
+            .eq('id', id)
+            .maybeSingle();
 
         if (error) {
-            console.error('Error al actualizar usuario:', error);
+            console.error('Error al obtener usuario por ID:', error);
             return null;
         }
 
-        return data;
-    }
-
-    static async deleteUser(email) {
-        const { data, error } = await supabase
-            .from('usuarios')
-            .delete()
-            .eq('email', email);
-
-        if (error) {
-            console.error('Error al eliminar usuario:', error);
-            return null;
-        }
         return data;
     }
 
@@ -75,6 +57,37 @@ class UsuariosSQL {
         }
         return data;
     }
+
+    // Actualiza un usuario existente, permitiendo cambios en puesto y puesto
+    static async updateUserById(id, updates) {
+        const { data, error } = await supabase
+            .from('usuarios')
+            .update(updates)
+            .eq('id', id)
+            .select('*');
+
+        if (error) {
+            console.error('Error al actualizar usuario:', error);
+            return null;
+        }
+
+        return data;
+    }
+
+    static async deleteUserById(id) {
+        const { data, error } = await supabase
+            .from('usuarios')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            console.error('Error al eliminar usuario:', error);
+            return null;
+        }
+        return data;
+    }
+
+    
 }
 
 module.exports = UsuariosSQL;

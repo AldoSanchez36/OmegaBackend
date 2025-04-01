@@ -106,21 +106,16 @@ const LogoutUsuario = async (req, res = express.response) => {
 };
 
 const UpdateUsuario = async (req, res = express.response) => {
-    const { email, puesto } = req.body;
+    const { id } = req.params;
+    const updates = req.body;
     
     try {
-        const usuarioActualizado = await UsuariosSQL.updateUser(email, puesto);
-
-        if (!usuarioActualizado) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'No se pudo actualizar el usuario',
-            });
-        }
+        const usuarioActualizado = await UsuariosSQL.updateUserById(id, updates);
 
         res.status(200).json({
             ok: true,
             msg: 'Usuario actualizado con éxito',
+            data: usuarioActualizado
         });
     } catch (error) {
         console.error("Error en UpdateUsuario:", error);
@@ -149,32 +144,6 @@ const getAllUsers = async (req, res = express.response) => {
     }
 };
 
-const DeleteUsuario = async (req, res = express.response) => {
-    const { email } = req.body;
-
-    try {
-        const eliminado = await UsuariosSQL.deleteUser(email);
-
-        if (!eliminado || eliminado.length === 0) {
-            return res.status(404).json({
-                ok: false,
-                msg: 'No se encontró el usuario para eliminar',
-            });
-        }
-
-        res.status(200).json({
-            ok: true,
-            msg: 'Usuario eliminado correctamente',
-        });
-    } catch (error) {
-        console.error("Error en DeleteUsuario:", error);
-        res.status(500).json({
-            ok: false,
-            msg: `Error interno: ${error.message || 'por favor notifica al admin Aldo Sanchez Leon'}`,
-        });
-    }
-};
-
 const getUserById = async (req, res = express.response) => {
     const { id } = req.params;
 
@@ -194,6 +163,32 @@ const getUserById = async (req, res = express.response) => {
         });
     } catch (error) {
         console.error("Error en getUserById:", error);
+        res.status(500).json({
+            ok: false,
+            msg: `Error interno: ${error.message || 'por favor notifica al admin Aldo Sanchez Leon'}`,
+        });
+    }
+};
+
+const DeleteUsuario = async (req, res = express.response) => {
+    const { id } = req.params;
+    
+    try {
+        const eliminado = await UsuariosSQL.deleteUserById(id);
+
+        if (!eliminado || eliminado.length === 0) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontró el usuario para eliminar',
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Usuario eliminado correctamente',
+        });
+    } catch (error) {
+        console.error("Error en DeleteUsuario:", error);
         res.status(500).json({
             ok: false,
             msg: `Error interno: ${error.message || 'por favor notifica al admin Aldo Sanchez Leon'}`,

@@ -15,4 +15,14 @@ const authMiddleware = (req, res, next) => {
     }
 };
 
-module.exports = authMiddleware;
+const soloAdmin = (req, res, next) => {
+    if (req.user.userType !== 'admin') {
+        return res.status(403).json({ message: 'Acceso denegado. Se requiere rol de administrador.' });
+    }
+    next();
+};
+
+module.exports = {
+    authMiddleware,
+    soloAdmin
+};

@@ -11,8 +11,7 @@ const {
     DeleteUsuario,
     getUserById,
 } = require('../controllers/authSQL');
-//RevalidarUsuario, 
-//require('../controllers/auth');
+const { authMiddleware, soloAdmin } = require('../middlewares/auth');
 
 const router = Router();
 
@@ -37,23 +36,19 @@ router.post(
     LoginUsuario
 );
 
-// Ruta para revalidar el token
-// router.get('/renew', RevalidarUsuario);
-
 // Ruta para cerrar sesión
 router.post('/logout', LogoutUsuario);
 
 // Ruta para obtener un usuario por ID
-router.get('/user/:id', getUserById);
+router.get('/user/:id', [authMiddleware, soloAdmin], getUserById);
 
 // Ruta para obtener todos los usuarios
-router.get('/users', getAllUsers); 
+router.get('/users',  [authMiddleware, soloAdmin], getAllUsers); 
 
 // Ruta para actualizar un usuario
-router.post('/update', UpdateUsuario);
+router.patch('/update/:id', [authMiddleware, soloAdmin], UpdateUsuario);
 
 // Ruta para eliminar un usuario
-router.delete('/delete', DeleteUsuario);
-
+router.delete('/delete/:id', [authMiddleware, soloAdmin], DeleteUsuario);
 
 module.exports = router;
