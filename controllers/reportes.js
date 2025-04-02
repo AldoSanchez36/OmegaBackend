@@ -1,5 +1,5 @@
 const express = require('express');
-const ReportesSQL = require('../models/ReportesSQL');
+const ReportesSQL = require('../models/ReportesSQL.js');
 
 const crearReporte = async (req, res = express.response) => {
     const { planta_id, sistema, usuario_id, observaciones = '', valores = [] } = req.body;
