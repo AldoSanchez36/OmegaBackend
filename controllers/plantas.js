@@ -2,7 +2,7 @@ const PlantasSQL = require('../models/PlantasSQL');
 
 const crearPlanta = async (req, res) => {
   const { nombre } = req.body;
-  const creado_por = req.user.id; // Supongamos que tienes middleware JWT
+  const creado_por = req.user.id; // ID del usuario autenticado
 
   const planta = await PlantasSQL.crearPlanta(nombre, creado_por);
 

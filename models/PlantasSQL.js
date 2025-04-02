@@ -1,41 +1,28 @@
 const supabase = require('../DB/sqlConfig');
 
-class ProcesosSQL {
-    static async crearProceso(nombre, planta_id, descripcion = null) {
+class PlantasSQL {
+    static async crearPlanta(nombre, creado_por) {
         const { data, error } = await supabase
-            .from('procesos')
-            .insert([{ nombre, planta_id, descripcion }])
+            .from('plantas')
+            .insert([{ nombre, creado_por }])
             .select('*');
 
         if (error) {
-            console.error('Error al crear proceso:', error);
+            console.error('Error al crear planta:', error);
             return null;
         }
 
         return data[0];
     }
 
-    static async obtenerProcesosPorPlanta(planta_id) {
+    static async obtenerPlantasPorUsuario(usuario_id) {
         const { data, error } = await supabase
-            .from('procesos')
+            .from('plantas')
             .select('*')
-            .eq('planta_id', planta_id);
+            .eq('creado_por', usuario_id);
 
         if (error) {
-            console.error('Error al obtener procesos por planta:', error);
-            return null;
-        }
-
-        return data;
-    }
-
-    static async obtenerTodosProcesos() {
-        const { data, error } = await supabase
-            .from('procesos')
-            .select('*');
-
-        if (error) {
-            console.error('Error al obtener todos los procesos:', error);
+            console.error('Error al obtener plantas por usuario:', error);
             return null;
         }
 
@@ -43,4 +30,4 @@ class ProcesosSQL {
     }
 }
 
-module.exports = ProcesosSQL;
+module.exports = PlantasSQL;

@@ -50,6 +50,53 @@ const crearReporte = async (req, res = express.response) => {
     }
 };
 
+const obtenerReportePorId = async (req, res = express.response) => {
+    const { id } = req.params;
+
+    try {
+        const reporte = await ReportesSQL.obtenerReportePorId(id);
+
+        if (!reporte) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Reporte no encontrado',
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            reporte,
+        });
+    } catch (error) {
+        console.error('Error al obtener reporte por ID:', error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error interno al obtener el reporte'
+        });
+    }
+};
+
+const obtenerReportesPorUsuario = async (req, res = express.response) => {
+    const { usuario_id } = req.params;
+
+    try {
+        const reportes = await ReportesSQL.obtenerReportesPorUsuario(usuario_id);
+
+        res.status(200).json({
+            ok: true,
+            reportes,
+        });
+    } catch (error) {
+        console.error('Error al obtener reportes del usuario:', error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error interno al obtener los reportes del usuario'
+        });
+    }
+};
+
 module.exports = {
     crearReporte,
+    obtenerReportePorId,
+    obtenerReportesPorUsuario
 };
