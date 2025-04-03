@@ -79,6 +79,7 @@ const LoginUsuario = async (req, res = express.response) => {
 
         const token = generateJWT(usuario.id, usuario.puesto);
 
+        console.log('Token generado:', token);
         res.status(200).json({
             ok: true,
             msg: 'Inicio de sesión exitoso',

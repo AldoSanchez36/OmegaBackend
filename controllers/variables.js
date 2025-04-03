@@ -2,15 +2,32 @@ const VariablesSQL = require('../models/VariablesSQL');
 
 // Crear una nueva variable
 const crearVariable = async (req, res) => {
-  const { nombre, unidad, proceso_id } = req.body;
+  const { variables } = req.body;
 
-  const variable = await VariablesSQL.crearVariable(nombre, unidad, proceso_id);
+  if (Array.isArray(variables)) {
+    const resultados = [];
 
-  if (!variable) {
-    return res.status(500).json({ ok: false, msg: 'Error al crear variable' });
+    for (const variable of variables) {
+      const { nombre, unidad, proceso_id } = variable;
+      const creada = await VariablesSQL.crearVariable(nombre, unidad, proceso_id);
+      if (!creada) {
+        return res.status(500).json({ ok: false, msg: `Error al crear variable: ${nombre}` });
+      }
+      resultados.push(creada);
+    }
+
+    return res.status(201).json({ ok: true, variables: resultados });
+  } else {
+    // Compatibilidad con el envío individual
+    const { nombre, unidad, proceso_id } = req.body;
+    const variable = await VariablesSQL.crearVariable(nombre, unidad, proceso_id);
+
+    if (!variable) {
+      return res.status(500).json({ ok: false, msg: 'Error al crear variable' });
+    }
+
+    return res.status(201).json({ ok: true, variable });
   }
-
-  res.status(201).json({ ok: true, variable });
 };
 
 // Obtener variables de un proceso

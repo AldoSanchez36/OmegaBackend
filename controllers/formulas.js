@@ -3,7 +3,7 @@ const FormulasSQL = require('../models/FormulasSQL');
 // Crear una nueva fórmula
 const crearFormula = async (req, res) => {
   const { nombre, expresion, proceso_id, variables_usadas } = req.body;
-  const creador_id = req.user.id; // requiere autenticación con JWT
+  const creador_id = req.user.id;
 
   const formula = await FormulasSQL.crearFormula(nombre, expresion, proceso_id, creador_id, variables_usadas);
 
