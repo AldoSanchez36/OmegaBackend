@@ -79,7 +79,7 @@ const LoginUsuario = async (req, res = express.response) => {
 
         const token = generateJWT(usuario.id, usuario.puesto);
 
-        console.log('Token generado:', token);
+        console.log('Token generado:');
         res.status(200).json({
             ok: true,
             msg: 'Inicio de sesión exitoso',
@@ -100,6 +100,7 @@ const LoginUsuario = async (req, res = express.response) => {
 const LogoutUsuario = async (req, res = express.response) => {
     // En una implementación básica con JWT, simplemente se elimina el token del lado del cliente
     // Si se implementa lista negra, aquí se agregaría el token a la lista
+    console.log('Usuario ha cerrado sesión');
     return res.status(200).json({
         ok: true,
         msg: 'Sesión cerrada exitosamente',
