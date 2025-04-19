@@ -159,7 +159,4 @@ Tables include:
 
 Define RLS policies in Supabase to allow appropriate operations by role.
 
-## License
-
-MIT
 
