@@ -5,7 +5,7 @@ const {
   obtenerProcesosPorPlanta,
   obtenerTodosProcesos
 } = require('../controllers/procesos');
-
+// host + /api/procesos'
 const router = Router();
 
 router.post('/crear', [authMiddleware, soloAdmin], crearProceso);

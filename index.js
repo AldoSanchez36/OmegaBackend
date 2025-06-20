@@ -20,6 +20,10 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(fileUpload());
 app.use(cors());
+/*app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));*/
 
 // Conexión a la base de datos
 //dbConnection();

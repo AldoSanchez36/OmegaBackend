@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
 
 const authMiddleware = (req, res, next) => {
-    const token = req.header('Authorization');
+    //cambio en estas dos linas para que funcione con JWT
+    const authHeader = req.header('Authorization');
+    const token = authHeader && authHeader.split(' ')[1];
     if (!token) {
         return res.status(401).json({ message: 'Acceso denegado. Token no proporcionado.' });
     }

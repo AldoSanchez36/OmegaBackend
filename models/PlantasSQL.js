@@ -28,6 +28,34 @@ class PlantasSQL {
 
         return data;
     }
+
+    static async obtenerPlantasPorAcceso(usuario_id) {
+        const { data, error } = await supabase
+            .from('usuarios_plantas')
+            .select('planta_id')
+            .eq('usuario_id', usuario_id);
+
+        if (error) {
+            console.error('Error al obtener accesos de plantas:', error);
+            return null;
+        }
+
+        const plantaIds = data.map(row => row.planta_id);
+
+        if (plantaIds.length === 0) return [];
+
+        const { data: plantas, error: errorPlantas } = await supabase
+            .from('plantas')
+            .select('*')
+            .in('id', plantaIds);
+
+        if (errorPlantas) {
+            console.error('Error al obtener plantas por acceso:', errorPlantas);
+            return null;
+        }
+
+        return plantas;
+    }
 }
 
 module.exports = PlantasSQL;
