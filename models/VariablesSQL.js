@@ -41,6 +41,27 @@ class VariablesSQL {
 
         return data;
     }
+
+    static async  actualizarVariable(id, nombre, unidad) {
+        const { data, error } = await supabase
+          .from('variables')
+          .update({ nombre, unidad })
+          .eq('id', id)
+          .select()
+          .single()
+      
+        if (error) return null
+        return data
+      }
+      
+      static async  eliminarVariable(id) {
+        const { error } = await supabase
+          .from('variables')
+          .delete()
+          .eq('id', id)
+      
+        return !error
+      }
 }
 
 module.exports = VariablesSQL;

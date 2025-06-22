@@ -54,8 +54,35 @@ const obtenerTodasVariables = async (req, res) => {
   res.status(200).json({ ok: true, variables });
 };
 
+// Actualizar una variable existente
+const actualizarVariable = async (req, res) => {
+  const { id } = req.params;
+  const { nombre, unidad } = req.body;
+
+  const updated = await VariablesSQL.actualizarVariable(id, nombre, unidad);
+  if (!updated) {
+    return res.status(500).json({ ok: false, msg: 'Error al actualizar la variable' });
+  }
+
+  res.status(200).json({ ok: true, variable: updated });
+};
+
+// Eliminar una variable existente
+const eliminarVariable = async (req, res) => {
+  const { id } = req.params;
+
+  const deleted = await VariablesSQL.eliminarVariable(id);
+  if (!deleted) {
+    return res.status(500).json({ ok: false, msg: 'Error al eliminar la variable' });
+  }
+
+  res.status(200).json({ ok: true, msg: 'Variable eliminada correctamente' });
+};
+
 module.exports = {
   crearVariable,
   obtenerVariablesPorProceso,
-  obtenerTodasVariables
+  obtenerTodasVariables,
+  actualizarVariable,
+  eliminarVariable
 };
