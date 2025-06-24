@@ -43,6 +43,22 @@ class UsuariosPlantasSQL {
 
         return data;
     }
+
+    static async updateAcceso(usuario_id, planta_id, puede_ver, puede_editar) {
+        const { data, error } = await supabase
+            .from('usuarios_plantas')
+            .update({ puede_ver, puede_editar })
+            .eq('usuario_id', usuario_id)
+            .eq('planta_id', planta_id)
+            .select('*');
+
+        if (error) {
+            console.error('Error al actualizar acceso a planta:', error);
+            return null;
+        }
+
+        return data[0];
+    }
 }
 
 module.exports = UsuariosPlantasSQL;

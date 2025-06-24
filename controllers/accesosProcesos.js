@@ -25,6 +25,18 @@ const obtenerProcesosDeUsuario = async (req, res) => {
 
   res.status(200).json({ ok: true, procesos });
 };
+// Actualizar
+const patchAccesoProceso = async (req, res) => {
+  const { usuario_id, proceso_id, puede_ver = true, puede_editar = false } = req.body;
+
+  const acceso = await UsuariosProcesosSQL.updateAcceso(usuario_id, proceso_id, puede_ver, puede_editar);
+
+  if (!acceso) {
+    return res.status(403).json({ ok: false, msg: 'El usuario no tiene acceso a la planta del proceso.' });
+  }
+
+  res.status(200).json({ ok: true, acceso });
+};
 
 // Revocar acceso de un usuario a un proceso
 const revocarAccesoProceso = async (req, res) => {
@@ -42,5 +54,6 @@ const revocarAccesoProceso = async (req, res) => {
 module.exports = {
   asignarAccesoProceso,
   obtenerProcesosDeUsuario,
+  patchAccesoProceso,
   revocarAccesoProceso
 };

@@ -117,19 +117,21 @@ The server runs at `http://localhost:4000`.
 
 #### Plant Access (`/api/accesos/plantas`)
 
-| Method | Path                   | Description                       | Protected    |
-| ------ | ---------------------- | --------------------------------- | ------------ |
-| POST   | `/asignar`             | Assign plant access to a user     | Admin-only   |
-| GET    | `/usuario/:usuario_id` | List plants user has access to    | Admin-only   |
-| DELETE | `/revocar`             | Revoke plant access for a user    | Admin-only   |
+| Method | Path                   | Description                                 | Protected    |
+| ------ | ---------------------- | ------------------------------------------- | ------------ |
+| POST   | `/asignar`             | Assign plant access to a user               | Admin-only   |
+| GET    | `/usuario/:usuario_id` | List plants user has access to              | Admin-only   |
+| PATCH  | `/actualizar`          | Update plant access permissions for a user  | Admin-only   |
+| DELETE | `/revocar`             | Revoke plant access for a user              | Admin-only   |
 
 #### Process Access (`/api/accesos/procesos`)
 
-| Method | Path                   | Description                        | Protected    |
-| ------ | ---------------------- | ---------------------------------- | ------------ |
-| POST   | `/asignar`             | Assign process access to a user    | Admin-only   |
-| GET    | `/usuario/:usuario_id` | List processes user has access to  | Admin-only   |
-| DELETE | `/revocar`             | Revoke process access for a user   | Admin-only   |
+| Method | Path                   | Description                                  | Protected    |
+| ------ | ---------------------- | -------------------------------------------- | ------------ |
+| POST   | `/asignar`             | Assign process access to a user              | Admin-only   |
+| GET    | `/usuario/:usuario_id` | List processes user has access to            | Admin-only   |
+| PATCH  | `/actualizar`          | Update process access permissions for a user | Admin-only   |
+| DELETE | `/revocar`             | Revoke process access for a user             | Admin-only   |
 
 ### Reports (`/api/reportes`)
 

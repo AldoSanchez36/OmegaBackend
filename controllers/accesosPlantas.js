@@ -39,8 +39,22 @@ const revocarAccesoPlanta = async (req, res) => {
   res.status(200).json({ ok: true, msg: 'Acceso revocado correctamente' });
 };
 
+// Actualizar acceso de un usuario a una planta
+const patchAccesoPlanta = async (req, res) => {
+  const { usuario_id, planta_id, puede_ver, puede_editar } = req.body;
+
+  const acceso = await UsuariosPlantasSQL.updateAcceso(usuario_id, planta_id, puede_ver, puede_editar);
+
+  if (!acceso) {
+    return res.status(500).json({ ok: false, msg: 'Error al actualizar acceso a la planta' });
+  }
+
+  res.status(200).json({ ok: true, acceso });
+};
+
 module.exports = {
   asignarAccesoPlanta,
   obtenerPlantasDeUsuario,
-  revocarAccesoPlanta
+  revocarAccesoPlanta,
+  patchAccesoPlanta
 };
