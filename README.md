@@ -20,6 +20,7 @@ Backend API for Omega application, managing users, plants, processes, variables,
   - [Reports (`/api/reportes`)](#reports-apireportes)
   - [File Upload (`/api/upload`)](#file-upload-apiupload)
   - [Mediciones - Filtros avanzados](#mediciones-filtros-avanzados)
+  - [Mediciones (`/api/mediciones`)](#mediciones-apimediciones)
 
 ## Features
 - User registration, login, token renewal and role-based access
@@ -158,8 +159,20 @@ Puedes filtrar mediciones por nombre de cliente (planta), proceso (sistema) o va
 | GET    | `/api/mediciones/proceso/Sistema principal de ALUPRINT` | Filtra mediciones por nombre del sistema (proceso) |
 | GET    | `/api/mediciones/variable/Cloruros`                   | Filtra mediciones por nombre de parámetro   |
 
+### Mediciones (`/api/mediciones`)
+
+| Método | Path                              | Descripción                                         | Protected      |
+|--------|------------------------------------|-----------------------------------------------------|----------------|
+| POST   | `/`                               | Crear una nueva medición                            | Authenticated  |
+| GET    | `/`                               | Listar todas las mediciones                         | Authenticated  |
+| GET    | `/:id`                            | Obtener una medición por ID                         | Authenticated  |
+| PATCH  | `/:id`                            | Actualizar una medición por ID                      | Authenticated  |
+| DELETE | `/:id`                            | Eliminar una medición por ID                        | Authenticated  |
+| GET    | `/variable/:nombre`               | Filtrar mediciones por nombre de variable           | Authenticated  |
+| GET    | `/sistema/:sistema`               | Filtrar mediciones por nombre de sistema (S0,S1,S2) | Authenticated  |
+| GET    | `/proceso/:nombre`                | Filtrar mediciones por nombre de proceso (sistema X)| Authenticated  |
+| GET    | `/cliente/:nombre`                | Filtrar mediciones por nombre de cliente (planta)   | Authenticated  |
+
 ## Database Schema
 
 Tables include:
-
-- `
