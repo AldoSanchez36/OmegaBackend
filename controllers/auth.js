@@ -41,7 +41,7 @@ const CrearUsuario = async (req, res = express.response) => {
             username,          // Asignar directamente el campo `username`
             email,             // Directamente asignar `email`
             password: hashedPassword, // Cambiar `pwd` a `password`
-            puesto: 'user'
+            puesto: 'client'
         });
 
         // Guardar usuario en la base de datos
