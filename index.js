@@ -38,6 +38,8 @@ app.use('/api/reportes', require('./routes/reportes'));
 app.use('/api/accesos/plantas', require('./routes/accesosPlantas'));
 app.use('/api/accesos/procesos', require('./routes/accesosProcesos'));
 
+app.use('/api/mediciones',require('./routes/mediciones'))
+
 // Middleware para manejo de errores globales
 app.use((err, req, res, next) => {
   console.error('Error:', err);

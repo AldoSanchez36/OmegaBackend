@@ -31,8 +31,14 @@ const obtenerPlantasPorAcceso = async (req, res) => {
   res.json({ ok: true, plantas });
 };
 
+const getAllPlantas = async (req, res) => {
+  const plantas = await PlantasSQL.getAll();
+  res.json({ ok: true, plantas });
+};
+
 module.exports = {
   crearPlanta,
   obtenerMisPlantas,
-  obtenerPlantasPorAcceso
+  obtenerPlantasPorAcceso,
+  getAllPlantas
 };

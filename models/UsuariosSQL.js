@@ -2,7 +2,7 @@ const supabase = require('../DB/sqlConfig');
 
 class UsuariosSQL {
     // Crea un nuevo usuario con los campos necesarios para el sistema de CRM
-    static async createUser(username, email, password, puesto = 'user') {
+    static async createUser(username, email, password, puesto = 'client') {
         const { data, error } = await supabase
             .from('usuarios')
             .insert([{ username, email, password, puesto }])

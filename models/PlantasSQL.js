@@ -56,6 +56,30 @@ class PlantasSQL {
 
         return plantas;
     }
+
+    static async getAll() {
+        const { data, error } = await supabase
+            .from('plantas')
+            .select('nombre');
+        if (error) {
+            console.error('Error al obtener todas las plantas:', error);
+            return null;
+        }
+        return data;
+    }
+
+    static async obtenerPorNombre(nombre) {
+        const { data, error } = await supabase
+            .from('plantas')
+            .select('*')
+            .eq('nombre', nombre)
+            .single();
+        if (error) {
+            console.error('Error al obtener planta por nombre:', error);
+            return null;
+        }
+        return data;
+    }
 }
 
 module.exports = PlantasSQL;

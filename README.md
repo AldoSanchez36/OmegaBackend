@@ -19,6 +19,7 @@ Backend API for Omega application, managing users, plants, processes, variables,
     - [Process Access (`/api/accesos/procesos`)](#process-access-apiaccesosprocesos)
   - [Reports (`/api/reportes`)](#reports-apireportes)
   - [File Upload (`/api/upload`)](#file-upload-apiupload)
+  - [Mediciones - Filtros avanzados](#mediciones-filtros-avanzados)
 
 ## Features
 - User registration, login, token renewal and role-based access
@@ -147,18 +148,18 @@ The server runs at `http://localhost:4000`.
 | ------ | ---- | ----------------------- | ---------- |
 | POST   | `/`  | Upload an image (field name `FotoFileI`), returns file path | Public     |
 
+### Mediciones - Filtros avanzados
+
+Puedes filtrar mediciones por nombre de cliente (planta), proceso (sistema) o variable (parámetro):
+
+| Método | Endpoint                                              | Descripción                                 |
+|--------|-------------------------------------------------------|---------------------------------------------|
+| GET    | `/api/mediciones/cliente/Aluprint SLP`                | Filtra mediciones por nombre de planta      |
+| GET    | `/api/mediciones/proceso/Sistema principal de ALUPRINT` | Filtra mediciones por nombre del sistema (proceso) |
+| GET    | `/api/mediciones/variable/Cloruros`                   | Filtra mediciones por nombre de parámetro   |
+
 ## Database Schema
 
 Tables include:
 
-- `usuarios` (id UUID, username, email, password, puesto)
-- `plantas` (id UUID, nombre, creado_por → usuarios.id)
-- `procesos` (id UUID, nombre, descripcion, planta_id → plantas.id)
-- `variables` (id UUID, nombre, unidad, proceso_id → procesos.id)
-- `formulas` (id UUID, nombre, expresion, proceso_id → procesos.id, variables_usadas JSONB)
-- Join tables `usuarios_plantas`, `usuarios_procesos` for access control
-- `reportes` (id UUID, usuario_id, planta_id, proceso_id, datos JSONB, observaciones)
-
-Define RLS policies in Supabase to allow appropriate operations by role.
-
-
+- `

@@ -28,10 +28,18 @@ const obtenerProcesosPorPlanta = async (req, res) => {
 
 // Obtener todos los procesos del sistema
 const obtenerTodosProcesos = async (req, res) => {
-  const procesos = await ProcesosSQL.obtenerTodosProcesos();
+  let procesos = await ProcesosSQL.obtenerTodosProcesos();
 
   if (!procesos) {
     return res.status(500).json({ ok: false, msg: 'Error al obtener procesos' });
+  }
+
+  // Si los procesos no traen variables, las agregamos aquí
+  // Suponiendo que tienes un modelo VariablesSQL con un método obtenerVariablesPorProceso
+  const VariablesSQL = require('../models/VariablesSQL');
+  for (let i = 0; i < procesos.length; i++) {
+    const variables = await VariablesSQL.obtenerVariablesPorProceso(procesos[i].id);
+    procesos[i].variables = Array.isArray(variables) ? variables : [];
   }
 
   res.status(200).json({ ok: true, procesos });

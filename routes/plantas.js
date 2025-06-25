@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { crearPlanta, obtenerMisPlantas, obtenerPlantasPorAcceso } = require('../controllers/plantas');
+const { crearPlanta, obtenerMisPlantas, obtenerPlantasPorAcceso, getAllPlantas } = require('../controllers/plantas');
 const { authMiddleware, soloAdmin } = require('../middlewares/auth');
 const router = Router();
 // host + /api/plantas
@@ -12,5 +12,8 @@ router.get('/mis-plantas/:usuario_id', authMiddleware, obtenerMisPlantas);
 
 // Obtener las plantas a las que el usuario tiene acceso
 router.get('/accesibles', authMiddleware, obtenerPlantasPorAcceso);
+
+// Obtener todas las plantas (solo admin)
+router.get('/all', [authMiddleware, soloAdmin], getAllPlantas);
 
 module.exports = router;

@@ -62,6 +62,19 @@ class VariablesSQL {
       
         return !error
       }
+
+    static async obtenerPorNombre(nombre) {
+        const { data, error } = await supabase
+            .from('variables')
+            .select('*')
+            .eq('nombre', nombre)
+            .single();
+        if (error) {
+            console.error('Error al obtener variable por nombre:', error);
+            return null;
+        }
+        return data;
+    }
 }
 
 module.exports = VariablesSQL;
