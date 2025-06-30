@@ -12,7 +12,7 @@ const generateJWT = (id, userType) => {
 };
 
 const CrearUsuario = async (req, res = express.response) => {
-    const { username, email, password, confirmPassword } = req.body;
+    const { username, email, password, confirmPassword, puesto } = req.body;
 
     if (password !== confirmPassword) {
         return res.status(400).json({
@@ -36,7 +36,7 @@ const CrearUsuario = async (req, res = express.response) => {
         const hashedPassword = bcrypt.hashSync(password, salt);
 
         // Crear usuario en Supabase
-        const newUser = await UsuariosSQL.createUser(username, email, hashedPassword, 'user');
+        const newUser = await UsuariosSQL.createUser(username, email, hashedPassword, puesto || 'client');
 
         if (!newUser) {
             throw new Error('Error al registrar usuario en la base de datos.');
