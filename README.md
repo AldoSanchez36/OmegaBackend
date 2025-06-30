@@ -21,6 +21,9 @@ Backend API for Omega application, managing users, plants, processes, variables,
   - [File Upload (`/api/upload`)](#file-upload-apiupload)
   - [Mediciones - Filtros avanzados](#mediciones-filtros-avanzados)
   - [Mediciones (`/api/mediciones`)](#mediciones-apimediciones)
+  - [Variables Tolerancia (`/api/variables-tolerancia`)](#variables-tolerancia-apivariables-tolerancia)
+  - [Documentos PDF (`/api/documentos-pdf`)](#documentos-pdf-apidocumentos-pdf)
+  - [Documentos PDF Permisos (`/api/documentos-pdf-permisos`)](#documentos-pdf-permisos-apidocumentos-pdf-permisos)
 
 ## Features
 - User registration, login, token renewal and role-based access
@@ -172,6 +175,34 @@ Puedes filtrar mediciones por nombre de cliente (planta), proceso (sistema) o va
 | GET    | `/sistema/:sistema`               | Filtrar mediciones por nombre de sistema (S0,S1,S2) | Authenticated  |
 | GET    | `/proceso/:nombre`                | Filtrar mediciones por nombre de proceso (sistema X)| Authenticated  |
 | GET    | `/cliente/:nombre`                | Filtrar mediciones por nombre de cliente (planta)   | Authenticated  |
+
+### Variables Tolerancia (`/api/variables-tolerancia`)
+
+| Método | Path        | Descripción                                 | Protected     |
+|--------|------------|---------------------------------------------|---------------|
+| POST   | `/`        | Crear una nueva tolerancia                  | Authenticated |
+| GET    | `/`        | Listar todas las tolerancias                | Authenticated |
+| GET    | `/:id`     | Obtener una tolerancia por ID               | Authenticated |
+| PATCH  | `/:id`     | Actualizar una tolerancia por ID            | Authenticated |
+| DELETE | `/:id`     | Eliminar una tolerancia por ID              | Authenticated |
+
+### Documentos PDF (`/api/documentos-pdf`)
+
+| Método | Path    | Descripción                          | Protected     |
+|--------|---------|--------------------------------------|---------------|
+| POST   | `/`     | Crear un nuevo documento PDF         | Authenticated |
+| GET    | `/`     | Listar todos los documentos PDF      | Authenticated |
+| GET    | `/:id`  | Obtener un documento PDF por ID      | Authenticated |
+| DELETE | `/:id`  | Eliminar un documento PDF por ID     | Authenticated |
+
+### Documentos PDF Permisos (`/api/documentos-pdf-permisos`)
+
+| Método | Path    | Descripción                          | Protected     |
+|--------|---------|--------------------------------------|---------------|
+| POST   | `/`     | Crear un nuevo permiso PDF           | Authenticated |
+| GET    | `/`     | Listar todos los permisos PDF        | Authenticated |
+| GET    | `/:id`  | Obtener un permiso PDF por ID        | Authenticated |
+| DELETE | `/:id`  | Eliminar un permiso PDF por ID       | Authenticated |
 
 ## Database Schema
 
