@@ -44,6 +44,9 @@ app.use('/api/variables-tolerancia',require('./routes/variablesTolerancia'))
 app.use('/api/documentos-pdf',require('./routes/documentosPdf'))
 app.use('/api/documentos-pdf-permisos',require('./routes/documentosPdfPermisos'))
 
+app.use('/api/dashboard',require('./routes/dashboard'))
+
+
 // Middleware para manejo de errores globales
 app.use((err, req, res, next) => {
   console.error('Error:', err);

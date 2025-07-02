@@ -115,6 +115,31 @@ class UsuariosProcesosSQL {
 
         return data;
     }
+
+    static async obtenerProcesosPorUsuario(usuario_id) {
+        // 1. Obtener IDs de procesos a los que el usuario tiene acceso
+        const { data: accesos, error: errorAccesos } = await supabase
+            .from('usuarios_procesos')
+            .select('proceso_id')
+            .eq('usuario_id', usuario_id)
+            .eq('puede_ver', true);
+        if (errorAccesos) {
+            console.error('Error al obtener accesos de procesos:', errorAccesos);
+            return [];
+        }
+        const procesoIds = accesos.map(a => a.proceso_id);
+        if (procesoIds.length === 0) return [];
+        // 2. Obtener procesos completos
+        const { data: procesos, error: errorProcesos } = await supabase
+            .from('procesos')
+            .select('*')
+            .in('id', procesoIds);
+        if (errorProcesos) {
+            console.error('Error al obtener procesos:', errorProcesos);
+            return [];
+        }
+        return procesos;
+    }
 }
 
 module.exports = UsuariosProcesosSQL;
