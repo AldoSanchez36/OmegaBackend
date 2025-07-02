@@ -39,6 +39,10 @@ app.use('/api/accesos/plantas', require('./routes/accesosPlantas'));
 app.use('/api/accesos/procesos', require('./routes/accesosProcesos'));
 
 app.use('/api/mediciones',require('./routes/mediciones'))
+app.use('/api/variables-tolerancia',require('./routes/variablesTolerancia'))
+
+app.use('/api/documentos-pdf',require('./routes/documentosPdf'))
+app.use('/api/documentos-pdf-permisos',require('./routes/documentosPdfPermisos'))
 
 // Middleware para manejo de errores globales
 app.use((err, req, res, next) => {
