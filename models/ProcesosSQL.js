@@ -54,6 +54,19 @@ class ProcesosSQL {
         }
         return data;
     }
+
+    static async obtenerPorId(id) {
+        const { data, error } = await supabase
+            .from('procesos')
+            .select('*')
+            .eq('id', id)
+            .single();
+        if (error) {
+            console.error('Error al obtener proceso por id:', error);
+            return null;
+        }
+        return data;
+    }
 }
 
 module.exports = ProcesosSQL;

@@ -80,6 +80,19 @@ class PlantasSQL {
         }
         return data;
     }
+
+    static async obtenerPorId(id) {
+        const { data, error } = await supabase
+            .from('plantas')
+            .select('*')
+            .eq('id', id)
+            .single();
+        if (error) {
+            console.error('Error al obtener planta por id:', error);
+            return null;
+        }
+        return data;
+    }
 }
 
 module.exports = PlantasSQL;

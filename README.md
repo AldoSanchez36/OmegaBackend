@@ -24,6 +24,7 @@ Backend API for Omega application, managing users, plants, processes, variables,
   - [Variables Tolerancia (`/api/variables-tolerancia`)](#variables-tolerancia-apivariables-tolerancia)
   - [Documentos PDF (`/api/documentos-pdf`)](#documentos-pdf-apidocumentos-pdf)
   - [Documentos PDF Permisos (`/api/documentos-pdf-permisos`)](#documentos-pdf-permisos-apidocumentos-pdf-permisos)
+  - [Documentos PDF Dashboard (`/api/documentos-pdf/dashboard`)](#documentos-pdf-dashboard-apidocumentos-pdf-dashboard)
 
 ## Features
 - User registration, login, token renewal and role-based access
@@ -203,6 +204,12 @@ Puedes filtrar mediciones por nombre de cliente (planta), proceso (sistema) o va
 | GET    | `/`     | Listar todos los permisos PDF        | Authenticated |
 | GET    | `/:id`  | Obtener un permiso PDF por ID        | Authenticated |
 | DELETE | `/:id`  | Eliminar un permiso PDF por ID       | Authenticated |
+
+### Documentos PDF Dashboard (`/api/documentos-pdf/dashboard`)
+
+| Método | Path                | Descripción                                                                 | Protected     |
+|--------|---------------------|-----------------------------------------------------------------------------|---------------|
+| GET    | `/dashboard`        | Devuelve todos los reportes/documentos PDF accesibles para el usuario, con información enriquecida (título, planta, sistema, estado, fecha, ruta_archivo, id) | Authenticated |
 
 ## Database Schema
 

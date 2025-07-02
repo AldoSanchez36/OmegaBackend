@@ -23,9 +23,16 @@ const eliminarDocumentoPDF = async (req, res) => {
     res.json({ ok: true });
 };
 
+const obtenerReportesDashboard = async (req, res) => {
+    const usuario_id = req.user.id;
+    const reportes = await DocumentosPDFSQL.obtenerReportesDashboard(usuario_id);
+    res.json({ ok: true, reportes });
+};
+
 module.exports = {
     crearDocumentoPDF,
     obtenerDocumentosPDF,
     obtenerDocumentoPDFPorId,
-    eliminarDocumentoPDF
+    eliminarDocumentoPDF,
+    obtenerReportesDashboard
 }; 
