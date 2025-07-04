@@ -12,8 +12,18 @@ const {
     getUserById,
 } = require('../controllers/authSQL');
 const { authMiddleware, soloAdmin } = require('../middlewares/auth');
+const rateLimit = require('express-rate-limit');
 
 const router = Router();
+
+// Limitar a 5 intentos de login por IP cada 5 minutos
+const loginLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 minutos
+  max: 5, // máximo 5 intentos
+  message: { ok: false, msg: 'Demasiados intentos de login, intenta más tarde.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Rutas de autenticación para crear un nuevo usuario
 router.post(
@@ -29,6 +39,7 @@ router.post(
 // Ruta para iniciar sesión
 router.post(
     '/login',
+    loginLimiter,
     [
         check('email', 'El email es obligatorio').isEmail(),
         check('password', 'El password debe ser de 6 caracteres').isLength({ min: 6 }),

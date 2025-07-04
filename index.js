@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 
@@ -64,3 +65,20 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
+
+/* const options = {
+  key: fs.readFileSync('./certs/key.pem'),
+  cert: fs.readFileSync('./certs/cert.pem')
+};
+
+https.createServer(options, app).listen(443, () => {
+  console.log('Servidor HTTPS en puerto 443');
+}); */
+
+// const helmet = require('helmet');
+// app.use(helmet());
+
+// app.use(cors({
+//   origin: ['https://tudominio.com'],
+//   credentials: true
+// }));
