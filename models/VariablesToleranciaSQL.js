@@ -1,10 +1,32 @@
 const supabase = require('../DB/sqlConfig');
 
 class VariablesToleranciaSQL {
-    static async crear({ variable_id, proceso_id, minimo, maximo }) {
+    static async crear({
+        variable_id,
+        proceso_id,
+        planta_id,
+        cliente_id,
+        bien_min,
+        bien_max,
+        limite_min,
+        limite_max,
+        fuera_min,
+        fuera_max
+    }) {
         const { data, error } = await supabase
             .from('variables_tolerancia')
-            .insert([{ variable_id, proceso_id, minimo, maximo }])
+            .insert([{
+                variable_id,
+                proceso_id,
+                planta_id,
+                cliente_id,
+                bien_min,
+                bien_max,
+                limite_min,
+                limite_max,
+                fuera_min,
+                fuera_max
+            }])
             .select('*');
         if (error) {
             console.error('Error al crear tolerancia:', error);
