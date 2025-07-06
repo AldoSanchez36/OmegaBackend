@@ -264,6 +264,43 @@ const VerificarUsuario = async (req, res = express.response) => {
     }
 };
 
+const solicitarRecuperacion = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const usuario = await UsuariosSQL.getUserByEmail(email);
+        if (!usuario) {
+            return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
+        }
+        const codigo = generarCodigoVerificacion();
+        await UsuariosSQL.updateUserById(usuario.id, { codigo_verificacion: codigo });
+        await enviarCodigoVerificacion(email, codigo);
+        res.status(200).json({ ok: true, msg: 'Código de recuperación enviado a tu correo.' });
+    } catch (error) {
+        console.error('Error en solicitarRecuperacion:', error);
+        res.status(500).json({ ok: false, msg: 'Error interno al solicitar recuperación.' });
+    }
+};
+
+const resetearPassword = async (req, res) => {
+    const { email, codigo, nuevaPassword } = req.body;
+    try {
+        const usuario = await UsuariosSQL.getUserByEmail(email);
+        if (!usuario) {
+            return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
+        }
+        if (usuario.codigo_verificacion !== codigo) {
+            return res.status(400).json({ ok: false, msg: 'Código incorrecto' });
+        }
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(nuevaPassword, salt);
+        await UsuariosSQL.updateUserById(usuario.id, { password: hashedPassword, codigo_verificacion: null });
+        res.status(200).json({ ok: true, msg: 'Contraseña actualizada correctamente.' });
+    } catch (error) {
+        console.error('Error en resetearPassword:', error);
+        res.status(500).json({ ok: false, msg: 'Error interno al resetear contraseña.' });
+    }
+};
+
 module.exports = {
     CrearUsuario,
     LoginUsuario,
@@ -272,5 +309,7 @@ module.exports = {
     getUserById,
     getAllUsers,
     DeleteUsuario,
-    VerificarUsuario
+    VerificarUsuario,
+    solicitarRecuperacion,
+    resetearPassword
 };

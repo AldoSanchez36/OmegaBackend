@@ -11,6 +11,8 @@ const {
     DeleteUsuario,
     getUserById,
     VerificarUsuario,
+    solicitarRecuperacion,
+    resetearPassword,
 } = require('../controllers/authSQL');
 const { authMiddleware, soloAdmin } = require('../middlewares/auth');
 const rateLimit = require('express-rate-limit');
@@ -65,5 +67,11 @@ router.delete('/delete/:id', [authMiddleware, soloAdmin], DeleteUsuario);
 
 // Ruta para verificar usuario por código
 router.post('/verificar', VerificarUsuario);
+
+// Ruta para solicitar recuperación de contraseña
+router.post('/forgot-password', solicitarRecuperacion);
+
+// Ruta para resetear contraseña
+router.post('/reset-password', resetearPassword);
 
 module.exports = router;
