@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const UsuariosSQL = require('../models/UsuariosSQL');
+const nodemailer = require('nodemailer');
 
 // Función para generar JWT
 const generateJWT = (id, userType) => {
@@ -10,6 +11,28 @@ const generateJWT = (id, userType) => {
         expiresIn: '4h',
     });
 };
+
+// Función para generar código de verificación
+function generarCodigoVerificacion() {
+    return Math.floor(100000 + Math.random() * 900000).toString(); // 6 dígitos
+}
+
+// Función para enviar el código de verificación por email
+async function enviarCodigoVerificacion(email, codigo) {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail', // Cambia si usas otro servicio
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    });
+    await transporter.sendMail({
+        from: `"Omega" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: 'Código de verificación Omega',
+        text: `Tu código de verificación es: ${codigo}`,
+    });
+}
 
 const CrearUsuario = async (req, res = express.response) => {
     const { username, email, password, confirmPassword, puesto } = req.body;
@@ -35,16 +58,29 @@ const CrearUsuario = async (req, res = express.response) => {
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = bcrypt.hashSync(password, salt);
 
-        // Crear usuario en Supabase
-        const newUser = await UsuariosSQL.createUser(username, email, hashedPassword, puesto || 'client');
+        // Generar código de verificación
+        const codigoVerificacion = generarCodigoVerificacion();
+
+        // Crear usuario en Supabase con verificado: false y el código
+        const newUser = await UsuariosSQL.createUser(
+            username,
+            email,
+            hashedPassword,
+            puesto || 'client',
+            false, // verificado
+            codigoVerificacion
+        );
 
         if (!newUser) {
             throw new Error('Error al registrar usuario en la base de datos.');
         }
 
+        // Enviar el código por email
+        await enviarCodigoVerificacion(email, codigoVerificacion);
+
         res.status(201).json({
             ok: true,
-            msg: 'Usuario registrado exitosamente',
+            msg: 'Usuario registrado exitosamente. Revisa tu correo para verificar tu cuenta.',
         });
     } catch (error) {
         console.error("Error en CrearUsuario:", error);
@@ -77,9 +113,16 @@ const LoginUsuario = async (req, res = express.response) => {
             });
         }
 
+        // Solo permitir login si el usuario está verificado
+        if (!usuario.verificado) {
+            return res.status(403).json({
+                ok: false,
+                msg: 'Debes verificar tu correo antes de iniciar sesión.'
+            });
+        }
+
         const token = generateJWT(usuario.id, usuario.puesto);
 
-        console.log('Token generado:');
         res.status(200).json({
             ok: true,
             msg: 'Inicio de sesión exitoso',
@@ -198,6 +241,29 @@ const DeleteUsuario = async (req, res = express.response) => {
     }
 };
 
+// Nueva función para verificar el código
+const VerificarUsuario = async (req, res = express.response) => {
+    const { email, codigo } = req.body;
+    try {
+        const usuario = await UsuariosSQL.getUserByEmail(email);
+        if (!usuario) {
+            return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
+        }
+        if (usuario.verificado) {
+            return res.status(400).json({ ok: false, msg: 'Usuario ya verificado' });
+        }
+        if (usuario.codigo_verificacion !== codigo) {
+            return res.status(400).json({ ok: false, msg: 'Código incorrecto' });
+        }
+        // Actualizar usuario: verificado = true, codigo_verificacion = null
+        await UsuariosSQL.updateUserById(usuario.id, { verificado: true, codigo_verificacion: null });
+        res.status(200).json({ ok: true, msg: 'Usuario verificado correctamente' });
+    } catch (error) {
+        console.error('Error en VerificarUsuario:', error);
+        res.status(500).json({ ok: false, msg: 'Error interno al verificar usuario' });
+    }
+};
+
 module.exports = {
     CrearUsuario,
     LoginUsuario,
@@ -205,5 +271,6 @@ module.exports = {
     UpdateUsuario,
     getUserById,
     getAllUsers,
-    DeleteUsuario
+    DeleteUsuario,
+    VerificarUsuario
 };

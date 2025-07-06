@@ -26,6 +26,7 @@
     "mongoose": "^8.16.1",
     "multer": "^2.0.1",
     "mysql": "^2.18.1",
+    "nodemailer": "^7.0.4",
     "nodemon": "^3.1.10",
     "punycode": "^2.3.1",
     "scp": "^0.0.3"

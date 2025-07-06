@@ -10,6 +10,7 @@ const {
     getAllUsers,
     DeleteUsuario,
     getUserById,
+    VerificarUsuario,
 } = require('../controllers/authSQL');
 const { authMiddleware, soloAdmin } = require('../middlewares/auth');
 const rateLimit = require('express-rate-limit');
@@ -61,5 +62,8 @@ router.patch('/update/:id', [authMiddleware, soloAdmin], UpdateUsuario);
 
 // Ruta para eliminar un usuario
 router.delete('/delete/:id', [authMiddleware, soloAdmin], DeleteUsuario);
+
+// Ruta para verificar usuario por código
+router.post('/verificar', VerificarUsuario);
 
 module.exports = router;

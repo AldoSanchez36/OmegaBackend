@@ -10,8 +10,8 @@ class VariablesToleranciaSQL {
         bien_max,
         limite_min,
         limite_max,
-        fuera_min,
-        fuera_max
+        usar_limite_min,
+        usar_limite_max
     }) {
         const { data, error } = await supabase
             .from('variables_tolerancia')
@@ -24,8 +24,8 @@ class VariablesToleranciaSQL {
                 bien_max,
                 limite_min,
                 limite_max,
-                fuera_min,
-                fuera_max
+                usar_limite_min,
+                usar_limite_max
             }])
             .select('*');
         if (error) {
